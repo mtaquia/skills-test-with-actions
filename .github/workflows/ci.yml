@@ -18,18 +18,21 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
-
+      - name: print-runner-info
+        run: |
+          echo "Os info: $(cat /etc/os-release)"
+          echo "pwd:$(pwd)"
+          echo "listing current dir:$(ls -ltrh)"
       - name: Run markdown lint
         run: |
             npm install remark-cli remark-preset-lint-consistent
-            npx remark . --use remark-preset-lint-consistent --frail
-      - run: ls -l 
+            npx remark . --use remark-preset-lint-consistent --frail 
       - uses: actions/upload-artifact@v4
         with:
           name: remark-lint-report
